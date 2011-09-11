@@ -506,3 +506,11 @@ test "#1416: don't omit one 'new' when compiling 'new new fn()()'", ->
   eq obj.prop, nonce
   eq obj.a, argNonceA
   eq obj.b, argNonceB
+
+test "passing missing arguments switch to defaults", ->
+  fn = (a=1, b=2, c=3) -> [a, b, c];
+  arr = fn 4, ,5
+  eq arr[0], 4
+  eq arr[1], 2
+  eq arr[2], 5
+  

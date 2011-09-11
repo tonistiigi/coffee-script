@@ -75,3 +75,45 @@ test "#1274: `[] = a()` compiles to `false` instead of `a()`", ->
   fn = -> a = true
   [] = fn()
   ok a
+
+test "missing objects in arrays", ->
+  #in the beginning
+  arr = [,1]
+  eq arr.length, 2
+  eq arr[0], undefined
+  eq arr[1], 1
+
+  #in the middle
+  arr = [1,,2,,,3]
+  eq arr.length, 6
+  eq arr[0], 1
+  eq arr[1], undefined
+  eq arr[2], 2,
+  eq arr[5], 3
+
+  #in the end still allows single optional comma
+  arr = [1,2,,]
+  eq arr.length, 3
+  eq arr[2], undefined
+
+test "using both comma and line break as separator does not result missing object", ->
+  arr = [
+    1,
+    2
+  ]
+  eq arr.length, 2
+
+  arr = [
+    1
+    ,
+    2
+  ]
+  eq arr.length, 2
+
+  arr = [
+    1
+    ,
+    ,
+    2
+  ]
+  eq arr.length, 3
