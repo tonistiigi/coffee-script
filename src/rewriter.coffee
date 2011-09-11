@@ -28,6 +28,7 @@ class exports.Rewriter
     @addImplicitParentheses()
     @ensureBalance BALANCED_PAIRS
     @rewriteClosingParens()
+    @addMissingUndefinedArguments()
     @tokens
 
   # Rewrite the token stream, looking one token ahead and behind.
@@ -268,6 +269,14 @@ class exports.Rewriter
         stack.push match
       else
         tokens.splice i, 0, val
+      1
+
+  # Fill argument lists starting with comma or including double comma
+  # with undefined arguments in appropriate places.
+  addMissingUndefinedArguments: ->
+    @scanTokens (token, i) ->
+      if token[0] == "," and @tokens[i-1][0] in [",","["]  
+        @tokens.splice i, 0, ['BOOL', 'undefined', 0]
       1
 
   # Generate the indentation tokens, based on another token on the same line.

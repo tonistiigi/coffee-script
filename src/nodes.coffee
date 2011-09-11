@@ -1007,6 +1007,7 @@ exports.Assign = class Assign extends Base
             [obj, idx] = new Value(obj.unwrapAll()).cacheReference o
           else
             idx = if obj.this then obj.properties[0].name else obj
+      continue if obj.unwrap().value == 'undefined'
       if not splat and obj instanceof Splat
         name = obj.name.unwrap().value
         obj = obj.unwrap()
