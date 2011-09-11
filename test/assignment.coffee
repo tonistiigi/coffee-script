@@ -331,3 +331,17 @@ test "#1643: splatted accesses in destructuring assignments should not be declar
         unless sub is nonce and sub2 is nonce2 and sub3 is nonce3 then throw new Error('[sub...]')
         """
       eq nonce, unless (try CoffeeScript.run code, bare: true catch e then true) then nonce
+
+test "destructuring assignments non interested values", ->
+  [,a] = [1, 2]
+  eq a, 2
+
+  [a,,[b,,[c]]] = [1, 2, [3, 4, [5, 6]]]
+  eq a, 1
+  eq b, 3
+  eq c, 5
+
+test "destructuring assignments with non intereseted values mixed with splats", ->
+  [,a,b...,,] = [1..5]
+  eq a, 2
+  arrayEq [3,4], b
